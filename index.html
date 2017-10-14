@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="[óra]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Practice JavaScript by drawing</title>
+  <link rel="stylesheet"  type="text/css" href="main.css" >
+</head>
+  
+
+<body>
+  <img src="https://i.imgur.com/kpXDr7g.gif" alt="light">
+  <canvas id="myCanvas" height="450" width="450" style="border: ">
+  </canvas>
+  
+  <script>
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+
+var cw = canvas.width;
+var ch = canvas.height;
+var r = cw/2;
+context.translate(r,r);
+r=r*0.95;
+analogClock();
+setInterval(analogClock, 1000);
+
+function analogClock(){
+  clockFace(); clockNumbers(); clockTime();
+}
+
+function clockFace(){
+  context.beginPath();
+  context.arc(0, 0, r, 0, Math.PI*2);
+  context.fillStyle = 'white'; //rgba(38, 101, 133, 0.2)';
+  context.strokeStyle ='grey';
+  context.lineWidth = 2.0;
+  context.fill();
+  context.stroke();
+}
+
+function clockNumbers(){
+ // context.font = '16px arial';
+  //context.textBaseline ="middle";
+ // context.textAlign = 'center';
+  
+    context.save();
+    context.strokeStyle = "gray";
+    for(var i=0; i<60; i++){
+    context.beginPath();
+    context.lineWidth = 1.0; 
+    context.moveTo(r-10,0);
+    context.lineTo(r-2,0);
+    context.rotate(Math.PI/30);
+    if(i%5===0){
+    context.lineWidth = 4.0;
+    // context.moveTo(r,10);  
+    context.lineTo(190,-20);
+    context.lineCap = 'round';
+            }
+    else{}
+    context.stroke();
+    }
+ //context.restore(); 
+}    
+
+function clockTime(){
+  var now= new Date();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  
+  hour = hour%12;
+  hour = (hour*(Math.PI/6) + (Math.PI/360) * minute + (Math.PI/21600) *second);
+  clockLine(context, hour, r*0.5, 8.0);
+  
+  minute = ((Math.PI/30) * minute + (Math.PI/1800) * second);
+  clockLine(context, minute, r*0.8, 5.0);
+  
+  second = (second * Math.PI/30);
+  clockLine(context, second, r*0.9, 2.0);
+}
+
+function clockLine(context, rot, y, width){
+  context.beginPath();
+  context.lineWidth = width;
+  context.moveTo(0, 0);
+  context.lineCap = "round";
+  context.rotate(rot);
+  context.lineTo(0, -y);
+  context.stroke();
+  context.rotate(-rot);
+}
+
+</script>
+</body>
+</html>
